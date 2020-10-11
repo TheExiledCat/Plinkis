@@ -7,6 +7,7 @@ public class Tetronimo_Movement : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] float autoFloatTimer=0.8f;
     [SerializeField] float horizontalTimer = 0.3f;
+    [SerializeField] Vector3 pivot;
     float lastTimer;
     float lastHorizontalTimer;
     
@@ -14,7 +15,7 @@ public class Tetronimo_Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //move once
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             MoveX(false);
@@ -25,6 +26,7 @@ public class Tetronimo_Movement : MonoBehaviour
             MoveX(true);
             lastHorizontalTimer = Time.time;
         }
+        //hold movement
         if (Time.time - lastHorizontalTimer > horizontalTimer)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
@@ -38,9 +40,29 @@ public class Tetronimo_Movement : MonoBehaviour
                 lastHorizontalTimer = Time.time;
             }
         }
+        //gravity
         if (Time.time - lastTimer > (Input.GetKey(KeyCode.DownArrow) ? autoFloatTimer /10: autoFloatTimer)){
             MoveY(true);
             lastTimer = Time.time;
+        }
+        //rotation
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Rotate();
+            
+            
+        }
+    }
+    void Rotate()
+    {
+        transform.RotateAround(transform.TransformPoint(pivot),Vector3.forward, -90);
+        if (CheckOutOfBounds())
+        {
+            if (transform.position.x < Field.Grid.width / 2)
+            {
+                MoveX(true);
+            }
+            else MoveX(false);
         }
     }
     void MoveX(bool right)
