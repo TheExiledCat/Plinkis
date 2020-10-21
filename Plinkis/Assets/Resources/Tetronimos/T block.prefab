@@ -303,8 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f911ce1d4d229994ba927c9fc0475d10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoFloatTimer: 1
-  horizontalTimer: 0.2
+  pivot: {x: 0, y: 0, z: 0}
 --- !u!1 &8846442493041411744
 GameObject:
   m_ObjectHideFlags: 0

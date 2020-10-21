@@ -1,17 +1,22 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Tetronimo_Movement : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] float autoFloatTimer=0.8f;
-    [SerializeField] float horizontalTimer = 0.3f;
+    float autoFloatTimer=1;
+    float horizontalTimer = 0.2f;
     [SerializeField] Vector3 pivot;
     float lastTimer;
     float lastHorizontalTimer;
-    
-
+    public event Action OnLock;
+    public event Action<Transform> OnStatic;
+    private void Start()
+    {
+        OnLock += Field.Grid.spawner.SpawnTetronimo;
+        OnStatic += Field.Grid.AddToGrid;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -49,21 +54,51 @@ public class Tetronimo_Movement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             Rotate();
-            
-            
         }
     }
+    
+    #region movement
     void Rotate()
     {
         transform.RotateAround(transform.TransformPoint(pivot),Vector3.forward, -90);
-        if (CheckOutOfBounds())
+        PushBack();
+    }
+    void PushBack()
+    {
+        
+        if (CheckTouchingWall())
         {
             if (transform.position.x < Field.Grid.width / 2)
             {
-                MoveX(true);
+                transform.position += Vector3.right;
+
             }
-            else MoveX(false);
+            else
+            {
+                transform.position += Vector3.left;
+
+            }
+            if (CheckTouchingOther())
+            {
+                transform.RotateAround(transform.TransformPoint(pivot), Vector3.forward, 90);
+            }
+            if (CheckTouchingWall())
+            {
+                
+                PushBack();
+            }
+            if (CheckTouchingFloor())
+            {
+                print("Floor touched");
+                transform.position += Vector3.up;
+                if (CheckOutOfBounds())
+                {
+                    transform.position += Vector3.down;
+                    transform.RotateAround(transform.TransformPoint(pivot), Vector3.forward, 90);
+                }
+            }
         }
+        
     }
     void MoveX(bool right)
     {
@@ -79,9 +114,19 @@ public class Tetronimo_Movement : MonoBehaviour
         if (CheckOutOfBounds())
         {
             transform.position += down ? Vector3.up : Vector3.down;
+            Lock();
+            
         }
     }
-    bool CheckOutOfBounds()
+    #endregion
+    #region math
+    void Lock()//freeze the tetronimo in place and call functions
+    {
+        OnLock?.Invoke();
+        OnStatic?.Invoke(transform);
+        this.enabled = false;
+    }
+    bool CheckOutOfBounds()//check if tetronimo block is touching a wall or another tetronimo
     {
         foreach(Transform t in transform)
         {
@@ -93,8 +138,59 @@ public class Tetronimo_Movement : MonoBehaviour
             {
                 return true;
             }
+            if (Field.Grid.grid2D[x, y] != null)
+            {
+                return true;
+            }
             
         }
         return false;
     }
+    bool CheckTouchingWall()
+    {
+        foreach (Transform t in transform)
+        {
+            int x = Mathf.RoundToInt(t.position.x);
+            int y = Mathf.RoundToInt(t.position.y);
+
+
+            if (x < 0 || x >= Field.Grid.width )
+            {
+                return true;
+            }
+            
+
+        }
+        return false;
+    }
+    bool CheckTouchingFloor()
+    {
+        foreach (Transform t in transform)
+        {
+            int y = Mathf.RoundToInt(t.position.y);
+            if (y <= 0 || y >= Field.Grid.height)
+            {
+                return true;
+            }
+
+
+        }
+        return false;
+    }
+    bool CheckTouchingOther()
+    {
+        foreach (Transform t in transform)
+        {
+            int x = Mathf.RoundToInt(t.position.x);
+            int y = Mathf.RoundToInt(t.position.y);
+
+            if (Field.Grid.grid2D[x, y] != null)
+            {
+                return true;
+            }
+
+        }
+        return false;
+    }
+    #endregion
 }
