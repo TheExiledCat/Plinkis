@@ -252,7 +252,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5906023041473611418}
-  - component: {fileID: 1421256635237398058}
   - component: {fileID: 4489637743467866593}
   m_Layer: 0
   m_Name: J Block
@@ -279,18 +278,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1421256635237398058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5618768433597636181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 714c50697ddfe8344a891caa9b1d23fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4489637743467866593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,6 +291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pivot: {x: 1, y: 0, z: 0}
+  tetronimoID: J
 --- !u!1 &6216235117758154272
 GameObject:
   m_ObjectHideFlags: 0

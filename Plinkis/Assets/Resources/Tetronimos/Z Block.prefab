@@ -333,7 +333,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6982177598241283851}
-  - component: {fileID: 2497971960130039739}
   - component: {fileID: 1107217692290756720}
   m_Layer: 0
   m_Name: Z Block
@@ -360,18 +359,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2497971960130039739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9001047747235792836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 714c50697ddfe8344a891caa9b1d23fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1107217692290756720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,3 +372,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pivot: {x: 1, y: 0, z: 0}
+  tetronimoID: Z

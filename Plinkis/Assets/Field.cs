@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +11,9 @@ public class Field : MonoBehaviour
     public int height=20;
     [HideInInspector]
     public TetronimoSpawner spawner;
+    string HeldID="";
+    public event Action<string> OnHold;
+    public bool hasHeld = false;
     void Awake()//create singleton
     {
         
@@ -24,13 +27,37 @@ public class Field : MonoBehaviour
             Destroy(gameObject);
         }
         grid2D = new Transform[width, height];
+        spawner = transform.GetChild(0).GetComponent<TetronimoSpawner>();
     }
     void Start()
     {
         transform.localScale = new Vector3(width, height, 1);
         transform.position += Vector3.right * width / 2+Vector3.up*height/2;
-        spawner = transform.GetChild(0).GetComponent<TetronimoSpawner>();
         
+        
+    }
+    public void HoldTetronimo(string t)
+    {
+        if (hasHeld) return;
+        
+
+        
+        OnHold?.Invoke(t);
+        
+        if (HeldID != "")
+        {
+            spawner.SpawnTetronimo(HeldID);
+        }
+        else
+        {
+            spawner.SpawnTetronimo();
+        }
+        hasHeld = true;
+        HeldID = t;
+    }
+    public void HoldReset()
+    {
+        hasHeld = false;
     }
     public void AddToGrid(Transform t)//add every block to the grid for calculation
     {
@@ -42,6 +69,7 @@ public class Field : MonoBehaviour
         }
         SwipeGrid();
     }
+    
     void SwipeGrid()//checks for lines
     {
         int lineCount=0;
@@ -91,6 +119,15 @@ public class Field : MonoBehaviour
                 
             }
         }
+    }
+    public void Die()
+    {
+        Pause();
+        
+    }
+    public void Pause()
+    {
+        spawner.enabled = false;
     }
     void OnDrawGizmos()
     {
